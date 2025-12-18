@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contador interactivo con JavaScript - Ejercicio práctico">
+    <title>Contador Interactivo Mejorado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <div class="container">
+            <!-- Header con controles -->
+            <div class="app-header">
+                <h1 class="titulo">
+                    <i class="fas fa-sort-numeric-up-alt"></i>
+                    Contador Interactivo
+                </h1>
+                <div class="header-controls">
+                    <button id="themeToggle" class="control-btn" title="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="soundToggle" class="control-btn" title="Activar/desactivar sonido">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Panel de información rápida -->
+            <div class="info-panel">
+                <div class="stat-item">
+                    <span class="stat-label">Mínimo</span>
+                    <span id="statMin" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Máximo</span>
+                    <span id="statMax" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Cambios</span>
+                    <span id="statChanges" class="stat-value">0</span>
+                </div>
+            </div>
+            
+            <!-- Display del contador mejorado -->
+            <div class="contador-display">
+                <div class="display-header">
+                    <span class="display-label">Valor Actual</span>
+                    <button id="toggleHistory" class="history-btn" title="Ver historial">
+                        <i class="fas fa-history"></i>
+                    </button>
+                </div>
+                <span id="contador" class="numero">0</span>
+                <div class="display-footer">
+                    <span id="binaryValue" class="binary-value">0</span>
+                    <span id="changeIndicator" class="change-indicator"></span>
+                </div>
+                <!-- Barra de progreso -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span id="progressMin">-100</span>
+                        <span id="progressMax">100</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Selector de paso -->
+            <div class="step-selector">
+                <span class="step-label">Tamaño de paso:</span>
+                <div class="step-buttons">
+                    <button class="step-btn active" data-step="1">1</button>
+                    <button class="step-btn" data-step="2">2</button>
+                    <button class="step-btn" data-step="5">5</button>
+                    <button class="step-btn" data-step="10">10</button>
+                </div>
+            </div>
+            
+            <!-- Botones de control principales -->
+            <div class="botones">
+                <button id="btnDecrementar" class="btn btn-danger">
+                    <span class="icono"><i class="fas fa-minus"></i></span>
+                    <span class="btn-text">Decrementar</span>
+                    <span class="shortcut-key">↓</span>
+                </button>
+                
+                <button id="btnResetear" class="btn btn-secondary">
+                    <span class="icono"><i class="fas fa-redo"></i></span>
+                    <span class="btn-text">Resetear</span>
+                    <span class="shortcut-key">R</span>
+                </button>
+                
+                <button id="btnIncrementar" class="btn btn-success">
+                    <span class="icono"><i class="fas fa-plus"></i></span>
+                    <span class="btn-text">Incrementar</span>
+                    <span class="shortcut-key">↑</span>
+                </button>
+            </div>
+            
+            <!-- Botones de acción rápida -->
+            <div class="quick-actions">
+                <div class="quick-buttons">
+                    <button id="btnDecrementar10" class="quick-btn btn-danger-light">
+                        <i class="fas fa-angle-double-down"></i>
+                        -10
+                    </button>
+                    <button id="btnDecrementar5" class="quick-btn btn-danger-light">
+                        <i class="fas fa-angle-down"></i>
+                        -5
+                    </button>
+                    <button id="btnSetToMin" class="quick-btn btn-warning">
+                        <i class="fas fa-arrow-to-bottom"></i>
+                        Mín
+                    </button>
+                    <button id="btnSetToZero" class="quick-btn btn-info">
+                        <i class="fas fa-bullseye"></i>
+                        0
+                    </button>
+                    <button id="btnSetToMax" class="quick-btn btn-warning">
+                        <i class="fas fa-arrow-to-top"></i>
+                        Máx
+                    </button>
+                    <button id="btnIncrementar5" class="quick-btn btn-success-light">
+                        <i class="fas fa-angle-up"></i>
+                        +5
+                    </button>
+                    <button id="btnIncrementar10" class="quick-btn btn-success-light">
+                        <i class="fas fa-angle-double-up"></i>
+                        +10
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Historial de cambios -->
+            <div class="history-panel">
+                <div class="history-header">
+                    <h3><i class="fas fa-history"></i> Últimos Cambios</h3>
+                    <button id="clearHistory" class="clear-btn" title="Limpiar historial">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- Historial se llena dinámicamente -->
+                </div>
+            </div>
+            
+            <!-- Información y mensajes -->
+            <div class="info">
+                <div class="info-header">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Información</span>
+                </div>
+                <p id="mensaje">El contador está en <strong>cero</strong></p>
+                <div class="extra-info">
+                    <div class="info-item">
+                        <span class="info-label">Paso actual:</span>
+                        <span id="currentStep" class="info-value">1</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Último cambio:</span>
+                        <span id="lastChangeTime" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Tendencia:</span>
+                        <span id="trendIndicator" class="info-value">Neutral</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Atajos de teclado -->
+            <div class="shortcuts">
+                <div class="shortcuts-header">
+                    <i class="fas fa-keyboard"></i>
+                    <span>Atajos de Teclado</span>
+                </div>
+                <div class="shortcuts-grid">
+                    <div class="shortcut">
+                        <kbd>↑</kbd>
+                        <span>Incrementar</span>
+                    </div>
+                    <div class="shortcut">
+                        <kbd>↓</kbd>
+                        <span>Decrementar</span>
+                    </div>
+                    <div class="shortcut">
+                        <kbd>R</kbd>
+                        <span>Resetear</span>
+                    </div>
+                    <div class="shortcut">
+                        <kbd>+</kbd>
+                        <span>+5</span>
+                    </div>
+                    <div class="shortcut">
+                        <kbd>-</kbd>
+                        <span>-5</span>
+                    </div>
+                    <div class="shortcut">
+                        <kbd>T</kbd>
+                        <span>Tema</span>
+                    </div>
+                    <div class="shortcut">
+                        <kbd>S</kbd>
+                        <span>Sonido</span>
+                    </div>
+                    <div class="shortcut">
+                        <kbd>H</kbd>
+                        <span>Historial</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notificaciones -->
+        <div class="notification" id="notification"></div>
+        
+        <!-- Modal de historial completo -->
+        <div class="modal" id="historyModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-history"></i> Historial Completo</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body" id="modalHistoryList"></div>
+                <div class="modal-footer">
+                    <button id="exportHistory" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Exportar CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
